@@ -1,42 +1,80 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Muli:wght@400;700&family=Cabin:wght@400;700&display=swap");
+
+body {
+  overflow-x: hidden;
+  font-family: "Cabin", sans-serif;
+  color: #717f99;
+  font-size: large;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Muli", sans-serif;
+  color: #444172;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.card-transition {
+  transition: all 0.5s ease;
+}
+
+.card-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.card-enter-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.card-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.card-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+ul li {
+  list-style: none;
+  border: 1px solid #563d7c;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-color: #563d7c1c;
+  color: #563d7c;
+  padding: 5px 50px;
+  border-radius: 5px;
+}
+
+.active {
+  font-weight: bold;
+  background-color: #563d7c; /* Ou qualquer cor que você preferir */
+  color: #ffffff;
+}
+
+#filters {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+@media screen and (max-width: 768px) {
+  #filters {
+    display: block !important;
+    justify-content: center;
+    padding-left: 0 !important;
+    padding-bottom: 25px;
+    text-align: center;
   }
-  to {
-    transform: rotate(360deg);
+
+  #filters li {
+    margin-bottom: 15px;
+    margin-left: 0;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
