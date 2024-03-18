@@ -64,7 +64,7 @@ export function Offers() {
 
   return (
     <Container fluid className="pb-5">
-      <ul id="filters" style={{}}>
+      <ul id="filters" style={{ marginBottom: "3rem" }}>
         <li
           className={filter === "" ? "active" : ""}
           onClick={() => filterCards("")}
