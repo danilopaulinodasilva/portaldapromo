@@ -9,7 +9,9 @@ import {
   getCategoriesAcf,
 } from "../graphql/wordpress";
 
-const cards = await getOffersAcf();
+const cards = async () => {
+  return await getOffersAcf();
+};
 
 let initialCards = [];
 

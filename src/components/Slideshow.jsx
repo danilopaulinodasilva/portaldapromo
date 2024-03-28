@@ -1,7 +1,9 @@
 import Carousel from "react-bootstrap/Carousel";
 import { getSlidesAcf } from "../graphql/wordpress";
 
-const initialSlides = await getSlidesAcf();
+const initialSlides = async () => {
+  return await getSlidesAcf();
+};
 
 export function Slideshow() {
   return (

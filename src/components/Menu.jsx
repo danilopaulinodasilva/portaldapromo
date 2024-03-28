@@ -4,7 +4,9 @@ import Navbar from "react-bootstrap/Navbar";
 import Image from "react-bootstrap/Image";
 import { getPrimaryMenu } from "../graphql/wordpress";
 
-const primaryMenu = await getPrimaryMenu();
+const primaryMenu = async () => {
+  return await getPrimaryMenu();
+};
 
 export function Menu() {
   return (
