@@ -8,7 +8,7 @@ export function Topbar() {
           className="text-white p-2 px-md-3"
           style={{ backgroundColor: "#563d7c", fontSize: "0.9rem" }}
         >
-          <Nav.Link href="#home" style={{ textAlign: "right" }}>
+          <Nav.Link href="/anuncie-aqui" style={{ textAlign: "right" }}>
             Anuncie aqui
           </Nav.Link>
         </Col>

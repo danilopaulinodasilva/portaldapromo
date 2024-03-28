@@ -17,6 +17,11 @@ h6 {
   color: #444172;
 }
 
+.wp-block-heading {
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
 .card-transition {
   transition: all 0.5s ease;
 }

@@ -3,50 +3,48 @@
 import { CgSandClock } from "react-icons/cg";
 import { useState } from "react";
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
+import {
+  getSiteLogo,
+  getOffersAcf,
+  getCategoriesAcf,
+} from "../graphql/wordpress";
 
-// Simulação de dados dos cards
-const initialCards = [
-  {
-    id: 1,
-    title: "Promoção Unilever Omo Comfort 2024 Hits da Limpeza",
-    image:
-      "https://storage.googleapis.com/portal-da-promo/L01_card_promocaounileveromocomfort-hitsdalimpeza-20241710267850657.webp",
-    description:
-      "Compre um produto participante e concorra a R$ 1 MILHÃO e a prêmios instantâneos! Comprando Omo + Comfort ainda tem DINHEIRO DE VOLTA!",
-    category: "Categoria A",
-    link: "https://promocaohitsdalimpeza.com.br/?utm_source=portal+da+promo&utm_medium=cpl&utm_campaign=UL-LD-HC-PRMHDL-HCP-NSA-PPRO-NSA-CMB-PRF",
-  },
-  {
-    id: 2,
-    title: "Promoção MID 2024 meio milhão de motivos para refrescar sua vida",
-    image:
-      "https://storage.googleapis.com/portal-da-promo/L01_card_promocaomid-meiomilhaodemotivospararefrescarsuavida-20241708455188705.webp",
-    description:
-      "Compre 5 sachês de MID e/ou MID ZERO e concorra a R$ 500 mil, além de um kit tecnologia com PS5 para te deixar conectado toda semana!",
-    category: "Categoria B",
-    link: "https://promomid.com.br/?utm_source=Portal-da-Promo&utm_medium=banner&utm_campaign=Ajinomoto_Capp_promo-mid_consideracao_Promo_Portal-da-Promo_Conversao_cpm_Promo%C3%A7%C3%A3o-mid&utm_content=All_Interesses_Conversao_18+_BR_All_Pe%C3%A7a-5__Conversao_Participe-ja-e-concorra&utm_term=estatico_342x224_NA_site-promo_Participe-ja-e-concorra-pe%C3%A7a-5_NA",
-  },
-  {
-    id: 3,
-    title: "Promoção Gomes da Costa 2024 - 70 anos de história",
-    image:
-      "https://storage.googleapis.com/portal-da-promo/L01_card_promocaogomesdacosta-70anosdehistoria-20241707168796739.webp",
-    description:
-      "Compre 5 sachês de MID e/ou MID ZERO e concorra a R$ 500 mil, além de um kit tecnologia com PS5 para te deixar conectado toda semana!",
-    category: "Categoria A",
-    link: "http://promogomesdacosta.com.br/?utm_source=Portal+da+Promo&utm_medium=Org%C3%A2nico&utm_campaign=2024&utm_id=Portal+da+Promo",
-  },
-  {
-    id: 4,
-    title: "Promoção Elma Chips 2024 Mordida Premiada",
-    image:
-      "https://storage.googleapis.com/portal-da-promo/L01_card_promocaoelmachips-mordidapremiada-20241709647806168.webp",
-    description:
-      "Compre produtos Elma Chips participantes e concorra a milhares de PRÊMIOS EM DINHEIRO* NA HORA!",
-    category: "Categoria C",
-    link: "https://portaldapromo.com.br/promocao/promocaoelmachips-mordidapremiada-2024-A01B02C01D04E02F01G04",
-  },
-];
+const cards = await getOffersAcf();
+
+let initialCards = [];
+
+cards.ofertas.edges.forEach((card) => {
+  initialCards.push({
+    id: card.node.databaseId,
+    title: card.node.title,
+    expirationDate: card.node.ofertas.dataExpiracaoDaOferta,
+    image: card.node.ofertas.imagemDeOferta.node.mediaItemUrl,
+    description: card.node.ofertas.descricao,
+    category: card.node.ofertas.categoria.edges[0].node.title,
+    link: card.node.ofertas.linkDaOferta,
+  });
+});
+
+const initialCategories = await getCategoriesAcf();
+
+const calculateRemainingDays = (expirationDate) => {
+  // Obter a data e hora atuais em UTC
+  const now = new Date();
+  const currentDate = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+  );
+
+  // Converter a data de expiração para um objeto Date
+  const expiryDate = new Date(expirationDate);
+
+  // Calcular a diferença em milissegundos
+  const timeDifference = expiryDate - currentDate;
+
+  // Converter a diferença de tempo em dias
+  const remainingDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+  return remainingDays;
+};
 
 export function Offers() {
   const [cards, setCards] = useState(initialCards);
@@ -71,24 +69,16 @@ export function Offers() {
         >
           Todas as promoções
         </li>
-        <li
-          className={filter === "Categoria A" ? "active" : ""}
-          onClick={() => filterCards("Categoria A")}
-        >
-          As mais procuradas
-        </li>
-        <li
-          className={filter === "Categoria B" ? "active" : ""}
-          onClick={() => filterCards("Categoria B")}
-        >
-          Novidades
-        </li>
-        <li
-          className={filter === "Categoria C" ? "active" : ""}
-          onClick={() => filterCards("Categoria C")}
-        >
-          Encerradas
-        </li>
+
+        {initialCategories.categorias.edges.map((category) => (
+          <li
+            key={category.node.databaseId}
+            className={filter === category.node.title ? "active" : ""}
+            onClick={() => filterCards(category.node.title)}
+          >
+            {category.node.title}
+          </li>
+        ))}
       </ul>
 
       <Row className="px-md-5">
@@ -96,7 +86,11 @@ export function Offers() {
           <Col md={3} className="py-2" key={card.id}>
             <Card
               className="card-transition card-enter-active"
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                border: "15px solid orange",
+              }}
             >
               <a
                 href={card.link}
@@ -104,10 +98,15 @@ export function Offers() {
                 style={{ textDecoration: "none" }}
                 rel="noopener noreferrer"
               >
-                <Card.Img variant="top" src={card.image} />
+                <Card.Img
+                  variant="top"
+                  src={card.image}
+                  style={{ borderRadius: "5px" }}
+                />
                 <Card.Body>
                   <Card.Text style={{ fontSize: ".85rem", color: "#999" }}>
-                    <CgSandClock /> Oferta expira em 44 dias
+                    <CgSandClock /> Oferta expira em{" "}
+                    {calculateRemainingDays(card.expirationDate)} dias
                   </Card.Text>
                   <Card.Title
                     style={{
@@ -126,7 +125,8 @@ export function Offers() {
                     style={{
                       backgroundColor: "#563d7c",
                       borderColor: "#563d7c",
-                      fontSize: "0.9rem",
+                      width: "100%",
+                      fontSize: "1.2rem",
                     }}
                   >
                     Saiba mais

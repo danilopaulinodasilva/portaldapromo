@@ -2,19 +2,24 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { Topbar } from "./components/Topbar";
 import { Menu } from "./components/Menu";
-import { Hero } from "./components/Hero";
-import { Featured } from "./components/Featured";
-import { Offers } from "./components/Offers";
 import { Footer } from "./components/Footer";
+import { Homepage } from "./components/Homepage";
+import { Page } from "./components/Page";
+import { NotFoundPage } from "./components/NotFoundPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
       <Topbar />
       <Menu />
-      <Hero />
-      <Featured />
-      <Offers />
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Homepage />} />
+          <Route path="/:pageUri" element={<Page />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
       <Footer />
     </>
   );
