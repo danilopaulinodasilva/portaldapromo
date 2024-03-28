@@ -1,14 +1,22 @@
+import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import { getSlidesAcf } from "../graphql/wordpress";
 
-const initialSlides = async () => {
-  return await getSlidesAcf();
-};
-
 export function Slideshow() {
+  const [slides, setSlides] = useState([]);
+
+  useEffect(() => {
+    async function loadSlides() {
+      const initialSlides = await getSlidesAcf();
+      setSlides(initialSlides.slides.edges);
+    }
+
+    loadSlides();
+  }, []); // A dependência vazia [] faz com que o useEffect seja executado uma vez após a montagem do componente
+
   return (
     <Carousel>
-      {initialSlides.slides.edges.map((slide) => (
+      {slides.map((slide) => (
         <Carousel.Item key={slide.node.databaseId}>
           <a href={slide.node.slides.linkDaCampanha}>
             <img

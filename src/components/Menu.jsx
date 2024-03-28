@@ -1,14 +1,24 @@
+import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Image from "react-bootstrap/Image";
 import { getPrimaryMenu } from "../graphql/wordpress";
 
-const primaryMenu = async () => {
-  return await getPrimaryMenu();
-};
-
 export function Menu() {
+  const [primaryMenu, setPrimaryMenu] = useState({
+    menu: { menuItems: { edges: [] } },
+  });
+
+  useEffect(() => {
+    async function fetchPrimaryMenu() {
+      const menu = await getPrimaryMenu();
+      setPrimaryMenu(menu);
+    }
+
+    fetchPrimaryMenu();
+  }, []);
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid className="px-md-5">

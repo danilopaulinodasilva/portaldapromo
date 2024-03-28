@@ -1,65 +1,56 @@
 /* eslint-disable no-unused-vars */
 
+import React, { useEffect, useState } from "react";
 import { CgSandClock } from "react-icons/cg";
-import { useState } from "react";
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
-import {
-  getSiteLogo,
-  getOffersAcf,
-  getCategoriesAcf,
-} from "../graphql/wordpress";
-
-const cards = async () => {
-  return await getOffersAcf();
-};
-
-let initialCards = [];
-
-cards.ofertas.edges.forEach((card) => {
-  initialCards.push({
-    id: card.node.databaseId,
-    title: card.node.title,
-    expirationDate: card.node.ofertas.dataExpiracaoDaOferta,
-    image: card.node.ofertas.imagemDeOferta.node.mediaItemUrl,
-    description: card.node.ofertas.descricao,
-    category: card.node.ofertas.categoria.edges[0].node.title,
-    link: card.node.ofertas.linkDaOferta,
-  });
-});
-
-const initialCategories = async () => {
-  return await getCategoriesAcf();
-};
-
-const calculateRemainingDays = (expirationDate) => {
-  // Obter a data e hora atuais em UTC
-  const now = new Date();
-  const currentDate = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
-  );
-
-  // Converter a data de expiração para um objeto Date
-  const expiryDate = new Date(expirationDate);
-
-  // Calcular a diferença em milissegundos
-  const timeDifference = expiryDate - currentDate;
-
-  // Converter a diferença de tempo em dias
-  const remainingDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
-
-  return remainingDays;
-};
+import { getOffersAcf, getCategoriesAcf } from "../graphql/wordpress";
 
 export function Offers() {
-  const [cards, setCards] = useState(initialCards);
+  const [cards, setCards] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [filter, setFilter] = useState("");
 
-  // Função para filtrar cards
+  useEffect(() => {
+    // Carrega as ofertas
+    async function loadOffers() {
+      const offers = await getOffersAcf();
+      const initialCards = offers.ofertas.edges.map((card) => ({
+        id: card.node.databaseId,
+        title: card.node.title,
+        expirationDate: card.node.ofertas.dataExpiracaoDaOferta,
+        image: card.node.ofertas.imagemDeOferta.node.mediaItemUrl,
+        description: card.node.ofertas.descricao,
+        category: card.node.ofertas.categoria.edges[0]?.node.title, // Optional chaining para segurança
+        link: card.node.ofertas.linkDaOferta,
+      }));
+      setCards(initialCards);
+    }
+
+    // Carrega as categorias
+    async function loadCategories() {
+      const fetchedCategories = await getCategoriesAcf();
+      setCategories(fetchedCategories.categorias.edges); // Ajustado com base na estrutura esperada
+    }
+
+    loadOffers();
+    loadCategories();
+  }, []);
+
+  const calculateRemainingDays = (expirationDate) => {
+    const now = new Date();
+    const currentDate = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+    );
+    const expiryDate = new Date(expirationDate);
+    const timeDifference = expiryDate - currentDate;
+    const remainingDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    return remainingDays;
+  };
+
   const filterCards = (category) => {
     setFilter(category);
   };
 
-  // Filtragem dos cards de acordo com a categoria selecionada
   const filteredCards = cards.filter(
     (card) => filter === "" || card.category === filter
   );
@@ -73,8 +64,7 @@ export function Offers() {
         >
           Todas as promoções
         </li>
-
-        {initialCategories.categorias.edges.map((category) => (
+        {categories.map((category) => (
           <li
             key={category.node.databaseId}
             className={filter === category.node.title ? "active" : ""}
@@ -84,7 +74,6 @@ export function Offers() {
           </li>
         ))}
       </ul>
-
       <Row className="px-md-5">
         {filteredCards.map((card) => (
           <Col md={3} className="py-2" key={card.id}>

@@ -19,6 +19,7 @@ export async function getPrimaryMenu() {
     }),
   });
   const { data } = await response.json();
+  console.log(data);
   return data;
 }
 
@@ -35,6 +36,7 @@ export async function getSiteLogo() {
     }),
   });
   const { data } = await response.json();
+  console.log(data);
   return data;
 }
 
@@ -76,6 +78,7 @@ export async function getOffersAcf() {
     }),
   });
   const { data } = await response.json();
+  console.log(data);
   return data;
 }
 
@@ -97,6 +100,7 @@ export async function getCategoriesAcf() {
     }),
   });
   const { data } = await response.json();
+  console.log(data);
   return data;
 }
 
@@ -127,6 +131,7 @@ export async function getSlidesAcf() {
     }),
   });
   const { data } = await response.json();
+  console.log(data);
   return data;
 }
 
@@ -144,6 +149,7 @@ export async function getHomepage() {
     }),
   });
   const { data } = await response.json();
+  console.log(data);
   return data;
 }
 
@@ -162,6 +168,6 @@ export async function getPage(pageUri) {
     }),
   });
   const { data } = await response.json();
-  console.log(pageUri);
+  console.log(data);
   return data;
 }
