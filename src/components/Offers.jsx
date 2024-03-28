@@ -27,7 +27,9 @@ cards.ofertas.edges.forEach((card) => {
   });
 });
 
-const initialCategories = await getCategoriesAcf();
+const initialCategories = async () => {
+  return await getCategoriesAcf();
+};
 
 const calculateRemainingDays = (expirationDate) => {
   // Obter a data e hora atuais em UTC
