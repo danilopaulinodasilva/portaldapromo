@@ -1,7 +1,9 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { getHomepage } from "../graphql/wordpress";
 
-const initialHomepage = await getHomepage();
+const initialHomepage = async () => {
+  return await getHomepage();
+};
 
 function createMarkup() {
   return { __html: initialHomepage.page.content };
