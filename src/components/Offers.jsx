@@ -103,7 +103,7 @@ export function Offers() {
                   </Card.Text>
                   <Card.Title
                     style={{
-                      color: "#444172",
+                      color: "#563d7c",
                       fontWeight: 600,
                       fontSize: "1.1rem",
                     }}

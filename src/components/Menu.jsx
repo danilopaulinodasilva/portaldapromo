@@ -23,10 +23,7 @@ export function Menu() {
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid className="px-md-5">
         <Navbar.Brand href="/">
-          <Image
-            src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
-            width={40}
-          />
+          <Image src="guiadapromo_logo.svg" height={40} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
