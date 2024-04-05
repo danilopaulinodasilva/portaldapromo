@@ -9,7 +9,7 @@ export function Footer() {
           className="text-white py-2 pt-4 px-md-5 text-center"
         >
           <p>
-            © {new Date().getFullYear()} Juros Abusivos. Todos os direitos
+            © {new Date().getFullYear()} Guia das Promoções. Todos os direitos
             reservados. Desenvolvido por{" "}
             <a href="#" style={{ color: "#ffffff" }}>
               Neoadtech

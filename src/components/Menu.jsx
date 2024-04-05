@@ -23,7 +23,7 @@ export function Menu() {
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid className="px-md-5">
         <Navbar.Brand href="/">
-          <Image src="guiadapromo_logo.svg" height={40} />
+          <Image src="logo.png" height={40} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
